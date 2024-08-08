@@ -1,0 +1,143 @@
+# Simple Chat Client for OpenAI API
+import requests
+import json
+import os
+
+def send_payload(content):
+    global config
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": config["api_key"],
+    }
+    payload = {
+    
+     "model": config["model"],
+        "messages": [
+            {
+                "role": config["role"],
+                "content": content,
+                "temperature": config["temperature"]
+            }
+        ]
+    }
+    
+    response = requests.post(config["url"], headers=headers, json=payload)
+    return response.json()
+
+def process_response(response):
+    global config
+    try:
+        message_content = response['choices'][0]['message']['content']
+        print(message_content.replace("\\n", "\n"))
+        #print("---------------------------------------------------------------------------------------------------")
+    except KeyError as e:
+        print(f"Unexpected response structure: {e}")
+
+helpstring = """
+
+Very simple client for OpenAI API
+
+Default config expected in a file called chat_config.json, example
+```
+{ "url":"https://endpoint.com/chat/completions",
+"api_key":"<key>",
+"model": "anthropic-claude-3-5-sonnet",
+"available_models": [
+    "anthropic-claude-3-5-sonnet", 
+    "anthropic-claude-3-haiku", 
+    "llama3-70b", 
+    "mistral-large"
+    ],
+"role":"user",
+"temperature":"0.5" }
+```
+User Commands:
+!exit:      Exit chat
+!debug:     Print last response json from LLM
+!models:    Show available models
+!T=X:       Set temperature to X
+!model=m:   Set model to m (m Integer, see !models command)
+!list_configs: List config files (json) in current folder
+!load_config <filename>:    Load configfile
+!save_config <filename>:    Save current config 
+!help:      Print this text
+
+"""
+
+def load_config(configfilename):
+    global config
+    try:
+        with open(configfilename, 'r') as configfile:
+            config = json.load(configfile)
+            configfile.close()
+            print(f"Loaded Configfile: {configfilename}.")
+    except IOError as e:
+        print(f"Error loading configfile: {e}")
+        exit
+    print("OpenAI Chat Client, type !help for help.")
+    
+def save_config(configfilename):
+    global config
+    try:
+        with open(configfilename, 'w') as configfile:
+            json.dump(config, configfile, indent=2)
+            configfile.close()
+            print(f"Saved Configfile: {configfilename}.")
+    except IOError as e:
+            print(f"Error saving configfile: {e}")
+            exit
+
+
+def main():
+    global config
+    load_config('chat_config.json')
+    
+    response=''
+    while True:
+        print("---"+config["model"]+"----T="+config["temperature"]+"----------------------------------------------------------")
+        user_input = input(">")
+        if user_input.startswith("!"):
+            if user_input == "!exit":
+                print("Exiting chat...")
+                break
+            elif user_input == "!debug":
+                if response!='':
+                    print(json.dumps(response, indent=4))
+                else:
+                    print("Send message to LLM first.")    
+                    
+            elif user_input=="!models":
+                print("Available models:")
+                for m in range(len(config["available_models"])):
+                    print(m+1,config["available_models"][m])
+            elif user_input.startswith("!T="):
+                config["temperature"]=user_input.replace("!T=","")
+                print("Set temperature to ",config["temperature"]+".")
+            elif user_input.startswith("!model="):
+               m= int(user_input.replace("!model=",""))-1
+               if m>=0 and m< len(config["available_models"]):
+                    config["model"]=config["available_models"][m]
+                    print("Set model to ",config["model"]+".")    
+               else:
+                    print("Model number must be between 0 and", str(len(config["available_models"]))+".")
+            elif user_input=="!help":
+                print(helpstring)
+            elif user_input.startswith("!load_config"):
+                configfilename=user_input.split(" ")[1]
+                load_config(configfilename)
+                pass
+            elif user_input.startswith("!save_config"):
+                configfilename=user_input.split(" ")[1]
+                save_config(configfilename)
+            elif user_input=="!list_configs":
+                 for f in os.listdir():
+                    if f.endswith('.json'):
+                        print(f)
+            else:
+                print(f"Unknown command: {user_input}\n Type !help for help")
+        else:
+            response = send_payload(user_input)
+            process_response(response)
+
+if __name__ == "__main__":
+    main()

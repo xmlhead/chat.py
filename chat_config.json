@@ -1,0 +1,12 @@
+{ "url":"https://endpoint.com/chat/completions",
+"api_key":"<key>",
+"model": "anthropic-claude-3-5-sonnet",
+"available_models": [
+    "anthropic-claude-3-5-sonnet", 
+    "anthropic-claude-3-haiku", 
+    "llama3-70b", 
+    "mistral-large"
+    ],
+"role":"user",
+"temperature":"0.5" }
+			 
