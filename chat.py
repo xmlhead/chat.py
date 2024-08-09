@@ -35,12 +35,12 @@ def process_response(response):
 
 helpstring = """
 
-Very simple client for OpenAI API
+Very simple command line client for OpenAI API LLMs (ChatGPT 4)
 
-Default config expected in a file called chat_config.json, example
+Default config expected in a file called chat_config.json, example:
 ```
 { "url":"https://endpoint.com/chat/completions",
-"api_key":"<key>",
+"api_key":"ENV_OPENAI_API_KEY",
 "model": "anthropic-claude-3-5-sonnet",
 "available_models": [
     "anthropic-claude-3-5-sonnet", 
@@ -52,16 +52,18 @@ Default config expected in a file called chat_config.json, example
 "temperature":"0.5" }
 ```
 User Commands:
-!exit:      Exit chat
-!debug:     Print last response json from LLM
-!models:    Show available models
-!T=X:       Set temperature to X
-!model=m:   Set model to m (m Integer, see !models command)
-!list_configs: List config files (json) in current folder
-!load_config <filename>:    Load configfile
-!save_config <filename>:    Save current config 
-!help:      Print this text
+ - !exit:      Exit chat
+ - !debug:     Print last response json from LLM
+ - !models:    Show available models
+ - !T=X:       Set temperature to X
+ - !model=m:   Set model to m (m Integer, see !models command)
+ - !list_configs: List config files (json) in current folder
+ - !load_config <filename>:    Load configfile
+ - !save_config <filename>:    Save current config 
+ - !help:      Print this text
 
+Note: API key can be set directly but it is recommended to keep the setting 
+and provie an environment variable called  OPENAI_API_KEY for security reasons. 
 """
 
 def load_config(configfilename):
@@ -74,6 +76,9 @@ def load_config(configfilename):
     except IOError as e:
         print(f"Error loading configfile: {e}")
         exit
+    # read API KEY from ENV Variable if set
+    if config["api_key"] == "ENV_OPENAI_API_KEY":
+        config["api_key"] = os.environ["OPENAI_API_KEY"]
     print("OpenAI Chat Client, type !help for help.")
     
 def save_config(configfilename):

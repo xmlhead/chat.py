@@ -4,7 +4,7 @@ Very simple command line client for OpenAI API LLMs (ChatGPT 4)
 Default config expected in a file called chat_config.json, example:
 ```
 { "url":"https://endpoint.com/chat/completions",
-"api_key":"<key>",
+"api_key":"ENV_OPENAI_API_KEY",
 "model": "anthropic-claude-3-5-sonnet",
 "available_models": [
     "anthropic-claude-3-5-sonnet", 
@@ -25,3 +25,6 @@ User Commands:
  - !load_config <filename>:    Load configfile
  - !save_config <filename>:    Save current config 
  - !help:      Print this text
+
+Note: API key can be set directly but it is recommended to keep the setting 
+and provie an environment variable called  OPENAI_API_KEY for security reasons. 
