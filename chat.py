@@ -40,15 +40,15 @@ See https://github.com/xmlhead/chat.py for more info.
 
 
 User Commands:
- - !exit:      Exit chat
- - !debug:     Print last response json from LLM
- - !models:    Show available models
- - !T=X:       Set temperature to X
- - !model=m:   Set model to m (m Integer, see !models command)
- - !list_configs: List config files (json) in current folder
- - !load_config <filename>:    Load configfile
- - !save_config <filename>:    Save current config 
- - !help:      Print this text
+  !exit:      Exit chat
+  !debug:     Print last response json from LLM
+  !models:    Show available models
+  !T=X:       Set temperature to X
+  !model=m:   Set model to m (m Integer, see !models command)
+  !list_configs: List config files (json) in current folder
+  !load_config <filename>:    Load configfile
+  !save_config <filename>:    Save current config 
+  !help:      Print this text
 
  
 """
