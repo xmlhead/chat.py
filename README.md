@@ -2,7 +2,7 @@
 Very simple command line client for OpenAI API LLMs (ChatGPT 4)
 
 Default config expected in a file called chat_config.json, example:
-```
+```json
 { "url":"https://api.openai.com/v1/chat/completions",
 "api_key":"ENV_OPENAI_API_KEY",
 "model": "gpt-3.5-turbo",
