@@ -4,7 +4,13 @@ import json
 import os
 
 def send_payload(content):
-    global config
+    global config, context
+
+    context.append({
+                "role": config["role"],
+                "content": content,
+                "temperature": config["temperature"]
+            })
     headers = {
         "Content-Type": "application/json",
         "Authorization": config["api_key"],
@@ -12,23 +18,19 @@ def send_payload(content):
     payload = {
     
      "model": config["model"],
-        "messages": [
-            {
-                "role": config["role"],
-                "content": content,
-                "temperature": config["temperature"]
-            }
-        ]
+        "messages": context        
+        
     }
     
     response = requests.post(config["url"], headers=headers, json=payload)
     return response.json()
 
 def process_response(response):
-    global config
+    global config, context
     try:
         message_content = response['choices'][0]['message']['content']
         print(message_content.replace("\\n", "\n"))
+        context.append({"role":response['choices'][0]['message']['role'],"content":message_content})
         #print("---------------------------------------------------------------------------------------------------")
     except KeyError as e:
         print(f"Unexpected response structure: {e}")
@@ -37,7 +39,6 @@ helpstring = """
 
 Very simple command line client for OpenAI API LLMs (like ChatGPT-4)
 See https://github.com/xmlhead/chat.py for more info.
-
 
 User Commands:
   !exit:      Exit chat
@@ -50,7 +51,6 @@ User Commands:
   !save_config <filename>:    Save current config 
   !help:      Print this text
 
- 
 """
 
 def load_config(configfilename):
@@ -81,10 +81,11 @@ def save_config(configfilename):
 
 
 def main():
-    global config
+    global config, context
     load_config('chat_config.json')
     
     response=''
+    context=[]
     while True:
         print("---"+config["model"]+"----T="+config["temperature"]+"----------------------------------------------------------")
         user_input = input(">")
