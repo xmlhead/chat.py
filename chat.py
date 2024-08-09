@@ -3,6 +3,8 @@ import requests
 import json
 import os
 
+_DEBUG=False
+
 def send_payload(content):
     global config, context
 
@@ -22,7 +24,10 @@ def send_payload(content):
         
     }
     
+    if _DEBUG:
+        print(f"\033[31mSENT: {payload}\033[0m\n")
     response = requests.post(config["url"], headers=headers, json=payload)
+   
     return response.json()
 
 def process_response(response):
