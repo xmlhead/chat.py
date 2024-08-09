@@ -111,7 +111,7 @@ def main():
                     config["model"]=config["available_models"][m]
                     print("Set model to ",config["model"]+".")    
                else:
-                    print("Model number must be between 0 and", str(len(config["available_models"]))+".")
+                    print("Model number must be between 1 and", str(len(config["available_models"]))+".")
             elif user_input=="!help":
                 print(helpstring)
             elif user_input.startswith("!load_config"):
