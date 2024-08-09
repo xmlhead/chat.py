@@ -13,6 +13,9 @@ def send_payload(content):
                 "content": content,
                 "temperature": config["temperature"]
             })
+    if len(context)-1>2*config["context_length"]:
+        
+        context=context[2:]
     headers = {
         "Content-Type": "application/json",
         "Authorization": config["api_key"],
@@ -26,6 +29,8 @@ def send_payload(content):
     
     if _DEBUG:
         print(f"\033[31mSENT: {payload}\033[0m\n")
+    
+  
     response = requests.post(config["url"], headers=headers, json=payload)
    
     return response.json()
@@ -51,6 +56,8 @@ User Commands:
   !models:    Show available models
   !T=X:       Set temperature to X
   !model=m:   Set model to m (m Integer, see !models command)
+  !context_length=n: Integer, number of previous messages put in the request for context
+  !new_context: Start new dialog
   !list_configs: List config files (json) in current folder
   !load_config <filename>:    Load configfile
   !save_config <filename>:    Save current config 
@@ -100,7 +107,7 @@ def main():
                 break
             elif user_input == "!debug":
                 if response!='':
-                    print(json.dumps(response, indent=4))
+                    print(f"\033[31mRECIEVED: {json.dumps(response, indent=4)}\033[0m\n")
                 else:
                     print("Send message to LLM first.")    
                     
@@ -118,6 +125,18 @@ def main():
                     print("Set model to ",config["model"]+".")    
                else:
                     print("Model number must be between 1 and", str(len(config["available_models"]))+".")
+            elif user_input.startswith("!context_length="):
+               n= int(user_input.replace("!context_length=",""))
+               if n>0  and n < config["max_context_length"]:
+                    config["context_length"]=n
+                    print("Set context length to ",str(config["context_length"])+".")   
+                    print("New context started.")
+                    context=[]
+               else:
+                    print("Context length must be between 1 and", str(config["max_context_length"])+".")
+            elif user_input=="!new_context":
+                    print("New context started.")
+                    context=[]
             elif user_input=="!help":
                 print(helpstring)
             elif user_input.startswith("!load_config"):

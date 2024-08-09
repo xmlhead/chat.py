@@ -22,11 +22,13 @@ python3 chat.py
 
 
 User Commands:
- - `!exit`:      Exit chat
- - `!debug`:     Print last response json from LLM
- - `!models`:    Show available models
+ - `!exit`:   Exit chat
+ - `!debug`:   Print last response json from LLM
+ - `!models`:  Show available models
  - `!T=X`:       Set temperature to X
  - `!model=m`:   Set model to m (m Integer, see !models command)
+ - `!context_length=n`: Integer, number of previous messages put in the request for context
+ - `!new_context`: Start new dialog
  - `!list_configs`: List config files (json) in current folder
  - `!load_config` <filename>:    Load configfile
  - `!save_config` <filename>:    Save current config 

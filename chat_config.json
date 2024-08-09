@@ -5,5 +5,6 @@
     "gpt-4o", "gpt-4o-mini", "gpt-4-turbo", "gpt-4", "gpt-3.5-turbo"
     ],
 "role":"user",
-"temperature":"0.5" }
-			 
+"temperature":"0.5",
+"context_length":3,
+"max_context_length":12 }
