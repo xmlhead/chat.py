@@ -29,9 +29,10 @@ User Commands:
  - `!model=m`:   Set model to m (m Integer, see !models command)
  - `!context_length=n`: Integer, number of previous messages put in the request for context
  - `!new_context`: Start new dialog
+ - `!toggle_logging`: Switch on/of logging, deafault: On
  - `!list_configs`: List config files (json) in current folder
- - `!load_config` <filename>:    Load configfile
- - `!save_config` <filename>:    Save current config 
+ - `!load_config <filename>` :    Load configfile
+ - `!save_config <filename>` :    Save current config 
  - `!print_config:` Print current config
  - `!help`:      Print this text
 

@@ -3,11 +3,10 @@ import requests
 import json
 import os
 import logging
+from datetime import datetime
 
-#logging.basicConfig(filename='client.log', level=logging.INFO)
-#
-#def log_interaction(user_input, response):
-#   logging.info(f'User Input: {user_input} | Response: {response}')
+
+
 
 
 
@@ -52,6 +51,7 @@ def process_response(response):
         #print("---------------------------------------------------------------------------------------------------")
     except KeyError as e:
         print(f"Unexpected response structure: {e}")
+    return message_content    
 
 helpstring = """
 
@@ -66,6 +66,7 @@ User Commands:
   !model=m:   Set model to m (m Integer, see !models command)
   !context_length=n: Integer, number of previous messages put in the request for context
   !new_context: Start new dialog
+  !toggle_logging :Switch on/of logging, deafault: On
   !list_configs: List config files (json) in current folder
   !load_config <filename>:    Load configfile
   !save_config <filename>:    Save current config 
@@ -105,8 +106,25 @@ def main():
     global config, context
     load_config('chat_config.json')
     
-    response=''
+    response=response_msg=''
     context=[]
+    
+    ###LOGGING
+    log_filename = f'logs/chat-session-{datetime.now().strftime("%Y%m%d-%H%M")}.log'
+    logging.basicConfig(
+    level=logging.INFO,  # Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    format=u'%(asctime)s - %(message)s', 
+    datefmt='%Y-%m-%d %H:%M:%S', 
+    filename=log_filename,
+    )
+    logger=logging.getLogger()    
+    # Now you can use the logger to log messages with your custom time format
+    enable_logging=True
+
+    
+
+
+    
     while True:
         print("---"+config["model"]+"----T="+config["temperature"]+"----------------------------------------------------------")
         user_input = input(">")
@@ -146,6 +164,9 @@ def main():
             elif user_input=="!new_context":
                     print("New context started.")
                     context=[]
+            elif user_input=="!toggle_logging":
+                    enable_logging = not enable_logging
+                    print(f"Logging set to {enable_logging}.")
             elif user_input=="!help":
                 print(helpstring)
             elif user_input.startswith("!load_config"):
@@ -165,7 +186,11 @@ def main():
                 print(f"Unknown command: {user_input}\n Type !help for help")
         else:
             response = send_payload(user_input)
-            process_response(response)
+            repsonse_msg=process_response(response)
+            if enable_logging:
+                logging.info(f'User: {user_input}')
+                logging.info(f'{config["model"]}:{response}')
+
 
 if __name__ == "__main__":
     main()
