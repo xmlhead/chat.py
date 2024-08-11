@@ -32,5 +32,6 @@ User Commands:
  - `!list_configs`: List config files (json) in current folder
  - `!load_config` <filename>:    Load configfile
  - `!save_config` <filename>:    Save current config 
+ - `!print_config:` Print current config
  - `!help`:      Print this text
 

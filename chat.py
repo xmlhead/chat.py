@@ -61,6 +61,7 @@ User Commands:
   !list_configs: List config files (json) in current folder
   !load_config <filename>:    Load configfile
   !save_config <filename>:    Save current config 
+  !print_config: Print current config
   !help:      Print this text
 
 """
@@ -102,7 +103,7 @@ def main():
         print("---"+config["model"]+"----T="+config["temperature"]+"----------------------------------------------------------")
         user_input = input(">")
         if user_input.startswith("!"):
-            if user_input == "!exit":
+            if user_input == "!exit": 
                 print("Exiting chat...")
                 break
             elif user_input == "!debug":
@@ -146,6 +147,8 @@ def main():
             elif user_input.startswith("!save_config"):
                 configfilename=user_input.split(" ")[1]
                 save_config(configfilename)
+            elif user_input == "!print_config":    
+                print(json.dumps(config, indent=2))
             elif user_input=="!list_configs":
                  for f in os.listdir():
                     if f.endswith('.json'):
