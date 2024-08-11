@@ -2,6 +2,14 @@
 import requests
 import json
 import os
+import logging
+
+#logging.basicConfig(filename='client.log', level=logging.INFO)
+#
+#def log_interaction(user_input, response):
+#   logging.info(f'User Input: {user_input} | Response: {response}')
+
+
 
 _DEBUG=False
 
