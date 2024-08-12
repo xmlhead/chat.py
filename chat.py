@@ -20,7 +20,7 @@ def send_payload(content):
                 "content": content,
                 "temperature": config["temperature"]
             })
-    if len(context)-1>2*config["context_length"]:
+    if len(context)>2*config["context_length"]: # each Interaction adds 2 to the lengh, request and reply
         
         context=context[2:]
     headers = {
