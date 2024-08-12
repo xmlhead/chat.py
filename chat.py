@@ -22,7 +22,7 @@ def send_payload(content):
             })
     if len(context)>2*config["context_length"]: # each Interaction adds 2 to the lengh, request and reply
         
-        context=context[2:]
+        context=context[2:] 
     headers = {
         "Content-Type": "application/json",
         "Authorization": config["api_key"],
@@ -117,13 +117,10 @@ def main():
     datefmt='%Y-%m-%d %H:%M:%S', 
     filename=log_filename,
     )
+    logging._defaultFormatter = logging.Formatter(u'%(asctime)s - %(message)s')
     logger=logging.getLogger()    
     # Now you can use the logger to log messages with your custom time format
     enable_logging=True
-
-    
-
-
     
     while True:
         print("---"+config["model"]+"----T="+config["temperature"]+"----------------------------------------------------------")
