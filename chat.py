@@ -9,11 +9,15 @@ from datetime import datetime
 
 
 
-
 _DEBUG=False
 
 def send_payload(content):
     global config, context
+    if config["api_key"] == "ENV_OPENAI_API_KEY":
+        api_key = os.environ["OPENAI_API_KEY"]
+    else:    
+        api_key = config["api_key"]
+ 
 
     context.append({
                 "role": config["role"],
@@ -24,8 +28,8 @@ def send_payload(content):
         
         context=context[2:] 
     headers = {
-        "Content-Type": "application/json",
-        "Authorization": config["api_key"],
+       "Content-Type": "application/json",
+       "Authorization": api_key,
     }
     payload = {
     
@@ -86,8 +90,6 @@ def load_config(configfilename):
         print(f"Error loading configfile: {e}")
         exit
     # read API KEY from ENV Variable if set
-    if config["api_key"] == "ENV_OPENAI_API_KEY":
-        config["api_key"] = os.environ["OPENAI_API_KEY"]
     print("OpenAI Chat Client, type !help for help.")
     
 def save_config(configfilename):
