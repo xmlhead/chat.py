@@ -106,7 +106,10 @@ def save_config(configfilename):
 
 def main():
     global config, context
-    load_config('chat_config.json')
+    try:
+        load_config(os.environ["CHAT_PY_DEFAULT_CONF"])
+    except:    
+        load_config("chat_config.json")
     
     response=response_msg=''
     context=[]
