@@ -88,7 +88,7 @@ def load_config(configfilename):
             print(f"Loaded Configfile: {configfilename}.")
     except IOError as e:
         print(f"Error loading configfile: {e}")
-        exit
+        exit()
     # read API KEY from ENV Variable if set
     print("OpenAI Chat Client, type !help for help.")
     
@@ -101,7 +101,7 @@ def save_config(configfilename):
             print(f"Saved Configfile: {configfilename}.")
     except IOError as e:
             print(f"Error saving configfile: {e}")
-            exit
+            exit()
 
 
 def main():
@@ -115,6 +115,7 @@ def main():
     context=[]
     
     ###LOGGING
+    os.makedirs('logs', exist_ok=True)
     log_filename = f'logs/chat-session-{datetime.now().strftime("%Y%m%d-%H%M")}.log'
     logging.basicConfig(
     level=logging.INFO,  # Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
@@ -188,7 +189,7 @@ def main():
                 print(f"Unknown command: {user_input}\n Type !help for help")
         else:
             response = send_payload(user_input)
-            repsonse_msg=process_response(response)
+            response_msg=process_response(response)
             if enable_logging:
                 logging.info(f'User: {user_input}')
                 logging.info(f'{config["model"]}:{response}')
