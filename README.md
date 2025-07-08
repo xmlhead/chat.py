@@ -36,3 +36,14 @@ User Commands:
  - `!print_config:` Print current config
  - `!help`:      Print this text
 
+
+## Web Interface
+
+A simple Flask-based web interface is included in `webapp.py`. Install the required packages and run the app:
+
+```bash
+pip install -r requirements.txt
+python3 webapp.py
+```
+
+Open `http://localhost:5000` in a browser to chat.
