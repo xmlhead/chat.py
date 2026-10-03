@@ -49,13 +49,16 @@ def send_payload(content):
 def process_response(response):
     global config, context
     try:
-        message_content = response['choices'][0]['message']['content']
-        print(message_content.replace("\\n", "\n"))
-        context.append({"role":response['choices'][0]['message']['role'],"content":message_content})
-        #print("---------------------------------------------------------------------------------------------------")
-    except KeyError as e:
+        message = response['choices'][0]['message']
+        message_content = message['content']
+        role = message['role']
+        display_content = message_content.replace("\\n", "\n")
+    except (KeyError, IndexError, TypeError, AttributeError) as e:
         print(f"Unexpected response structure: {e}")
-    return message_content    
+        return None
+    print(display_content)
+    context.append({"role": role, "content": message_content})
+    return message_content
 
 helpstring = """
 
